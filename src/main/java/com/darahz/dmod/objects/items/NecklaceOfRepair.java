@@ -171,7 +171,7 @@ public class NecklaceOfRepair extends Item {
 			final long seconds = totalSecs % 60;
 			if (KeyboardHelper.isHoldingShift()) {
 				tooltip.add(new StringTextComponent(TextFormatting.WHITE
-						+ "Time kept in inventory: " + TextFormatting.GOLD
+						+ ">Time kept in inventory: " + TextFormatting.GOLD
 						+ minutes + ":" + seconds));
 				tooltip.add(new StringTextComponent(
 						"Will repair all items in players inventory."));

@@ -2,6 +2,7 @@ package com.darahz.dmod.objects;
 
 import com.darahz.dmod.dMod;
 import com.darahz.dmod.objects.items.CraftingWidget;
+import com.darahz.dmod.objects.items.ItemAttractionDevice;
 import com.darahz.dmod.objects.items.Mobrelocator;
 import com.darahz.dmod.objects.items.NecklaceOfRepair;
 import com.darahz.dmod.objects.items.SpawnerRelocator;
@@ -25,6 +26,7 @@ public class ItemInit {
 	public static final SpawnerReprogrammer spawnerreprogramming_tool = null;
 	public static final NecklaceOfRepair necklaceofrepair = null;
 	public static final CraftingWidget craftingwidget = null;
+	public static final ItemAttractionDevice itemattractiondevice = null;
 
 	@SubscribeEvent
 	public static void registerItems(final RegistryEvent.Register<Item> event) {
@@ -39,6 +41,8 @@ public class ItemInit {
 		event.getRegistry().register(new NecklaceOfRepair(
 				new Item.Properties().group(dMod.dmodTab.instance)));
 		event.getRegistry().register(new CraftingWidget(
+				new Item.Properties().group(dMod.dmodTab.instance)));
+		event.getRegistry().register(new ItemAttractionDevice(
 				new Item.Properties().group(dMod.dmodTab.instance)));
 	}
 
