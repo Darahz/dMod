@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ixi",
+    "SxS",
+    "SSS"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_bars"
+    },
+    "x": {
+      "item": "minecraft:snow_block"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "darahzmod:freezingelement_block"
+  }
+}

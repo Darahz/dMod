@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+    "textures": {
+        "top": "darahzmod:blocks/freezingelement_block_top",
+        "front": "darahzmod:blocks/freezingelement_block_front",
+        "side": "darahzmod:blocks/freezingelement_block"
+    }
+}

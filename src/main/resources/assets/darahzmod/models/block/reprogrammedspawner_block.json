@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+    "textures": {
+        "top": "darahzmod:blocks/reprogrammedspawner_block",
+        "front": "darahzmod:blocks/reprogrammedspawner_block",
+        "side": "darahzmod:blocks/reprogrammedspawner_block"
+    }
+}
