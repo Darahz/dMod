@@ -25,13 +25,14 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class FreezingElementTileEntity extends TileEntity implements ITickableTileEntity {
+public class FreezingElementTileEntity extends TileEntity
+		implements
+			ITickableTileEntity {
 
 	private static int tickDown = 120;
 	private static final int tickDownInit = 120;
 	private static int freezingRange = 1;
-	
-	
+
 	public FreezingElementTileEntity() {
 		this(dmodTileEntityType.FREEZING_ELEMENT.get());
 	}
@@ -45,135 +46,151 @@ public class FreezingElementTileEntity extends TileEntity implements ITickableTi
 	public void tick() {
 
 		if (tickDown == 120) {
-			BlockPos pos = this.getPos().add(0, 1, 0);
+			final BlockPos pos = this.getPos().add(0, 1, 0);
 
-			TileEntity tileentity = world.getTileEntity(pos);
-			if (tileentity == null) {
+			final TileEntity tileentity = world.getTileEntity(pos);
+			if (tileentity == null)
 				if (world.isAirBlock(pos)) {
-					this.world.setBlockState(pos, Blocks.SNOW.getDefaultState());
-					PlayerEntity player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 10d, true);
-					SoundEvent placeSound = Blocks.SNOW.getDefaultState().getSoundType(world, pos, player)
-							.getPlaceSound();
-					this.world.playSound(player, pos, placeSound, SoundCategory.BLOCKS, 1f, 1f);
+					this.world.setBlockState(pos,
+							Blocks.SNOW.getDefaultState());
+					final PlayerEntity player = world.getClosestPlayer(
+							pos.getX(), pos.getY(), pos.getZ(), 10d, true);
+					final SoundEvent placeSound = Blocks.SNOW.getDefaultState()
+							.getSoundType(world, pos, player).getPlaceSound();
+					this.world.playSound(player, pos, placeSound,
+							SoundCategory.BLOCKS, 1f, 1f);
 				}
-			}
 
 			placeItemInChest(tileentity);
 		}
 
 		if (tickDown != 0) {
 			tickDown--;
-			
-			spawnParticles(world,pos);
-			float willFreeze = (world.getRandom().nextFloat() / 4) ;
-			
-			if (willFreeze < 0.003f){	
+
+			spawnParticles(world, pos);
+			final float willFreeze = (world.getRandom().nextFloat() / 4);
+
+			if (willFreeze < 0.003f)
 				freezeLiquids(world, pos);
-			}
-			
+
 			return;
 		}
 
 		tickDown = FreezingElementTileEntity.tickDownInit;
 
 	}
-	
-	private static void spawnParticles(World world,BlockPos pos) {
-		double d0 = (double) pos.getX() + (double) world.rand.nextFloat();
-		double d1 = (double) pos.getY() + 0.8D;
-		double d2 = (double) pos.getZ() + (double) world.rand.nextFloat();
-		if (world.isAirBlock(pos.add(0, 1, 0))) {
-			world.addParticle(ParticleTypes.ITEM_SNOWBALL, d0, d1 + 0.4D, d2, 0.0D, 0.0D, 0.0D);
-		}
-	}
-	
-	private static void freezeLiquids(World world,BlockPos pos) {
-		if(freezingRange > 1) {
 
-			List<BlockPos> list = BlockPos.getAllInBox(pos.add(-freezingRange, -freezingRange, -freezingRange), pos.add(freezingRange, freezingRange, freezingRange)).map(BlockPos::toImmutable).collect(Collectors.toList());
+	private static void spawnParticles(World world, BlockPos pos) {
+		final double d0 = (double) pos.getX() + (double) world.rand.nextFloat();
+		final double d1 = pos.getY() + 0.8D;
+		final double d2 = (double) pos.getZ() + (double) world.rand.nextFloat();
+		if (world.isAirBlock(pos.add(0, 1, 0)))
+			world.addParticle(ParticleTypes.ITEM_SNOWBALL, d0, d1 + 0.4D, d2,
+					0.0D, 0.0D, 0.0D);
+	}
+
+	private static void freezeLiquids(World world, BlockPos pos) {
+		if (freezingRange > 1) {
+
+			final List<BlockPos> list = BlockPos.getAllInBox(
+					pos.add(-freezingRange, -freezingRange, -freezingRange),
+					pos.add(freezingRange, freezingRange, freezingRange))
+					.map(BlockPos::toImmutable).collect(Collectors.toList());
 
 			Collections.shuffle(list);
-			for (BlockPos blockPos : list) {
-				BlockState state = world.getBlockState(blockPos);
-				if(state.getBlock() instanceof FlowingFluidBlock) {
-					IFluidState ifluidstate = world.getFluidState(blockPos);
-					if(ifluidstate.isSource()) {
-						if(state.getBlock() == Blocks.WATER)
-							world.setBlockState(blockPos, Blocks.ICE.getDefaultState());
-						else if(state.getBlock() == Blocks.LAVA)
-							world.setBlockState(blockPos, Blocks.OBSIDIAN.getDefaultState());
-					}
+			for (final BlockPos blockPos : list) {
+				final BlockState state = world.getBlockState(blockPos);
+				if (state.getBlock() instanceof FlowingFluidBlock) {
+					final IFluidState ifluidstate = world
+							.getFluidState(blockPos);
+					if (ifluidstate.isSource())
+						if (state.getBlock() == Blocks.WATER)
+							world.setBlockState(blockPos,
+									Blocks.ICE.getDefaultState());
+						else if (state.getBlock() == Blocks.LAVA)
+							world.setBlockState(blockPos,
+									Blocks.OBSIDIAN.getDefaultState());
 				}
 			}
-		}else {
+		} else {
 			pos = pos.add(0, 1, 0);
-			BlockState state = world.getBlockState(pos);
-			if(state.getBlock() instanceof FlowingFluidBlock) {
-				IFluidState ifluidstate = world.getFluidState(pos);
-				if(ifluidstate.isSource()) {
-					if(state.getBlock() == Blocks.WATER)
+			final BlockState state = world.getBlockState(pos);
+			if (state.getBlock() instanceof FlowingFluidBlock) {
+				final IFluidState ifluidstate = world.getFluidState(pos);
+				if (ifluidstate.isSource())
+					if (state.getBlock() == Blocks.WATER)
 						world.setBlockState(pos, Blocks.ICE.getDefaultState());
-					else if(state.getBlock() == Blocks.LAVA)
-						world.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
-				}
+					else if (state.getBlock() == Blocks.LAVA)
+						world.setBlockState(pos,
+								Blocks.OBSIDIAN.getDefaultState());
 			}
 		}
-		
+
 	}
-	
 
 	private static boolean placeItemInChest(TileEntity tileEntity) {
 		if (tileEntity instanceof IInventory) {
 			boolean doublechest = false;
 			if (tileEntity.getBlockState().getBlock() instanceof ChestBlock) {
-				ChestType chesttype = tileEntity.getBlockState().get(ChestBlock.TYPE);
+				final ChestType chesttype = tileEntity.getBlockState()
+						.get(ChestBlock.TYPE);
 				doublechest = chesttype != ChestType.SINGLE;
 			}
 
-			World world = tileEntity.getWorld();
+			final World world = tileEntity.getWorld();
 
-			IInventory inventory = (IInventory) tileEntity;
+			final IInventory inventory = (IInventory) tileEntity;
 
 			if (doublechest) {
-				BlockPos opos = tileEntity.getPos()
-						.offset(ChestBlock.getDirectionToAttached(tileEntity.getBlockState()));
-				IInventory chestsideone = inventory;
-				IInventory chestsidetwo = (IInventory) world.getTileEntity(opos);
+				final BlockPos opos = tileEntity.getPos().offset(ChestBlock
+						.getDirectionToAttached(tileEntity.getBlockState()));
+				final IInventory chestsideone = inventory;
+				final IInventory chestsidetwo = (IInventory) world
+						.getTileEntity(opos);
 
 				for (int i = 0; i < chestsideone.getSizeInventory(); i++) {
-					ItemStack stack = chestsideone.getStackInSlot(i);
+					final ItemStack stack = chestsideone.getStackInSlot(i);
 					if (stack.getItem() == Items.AIR) {
-						chestsideone.setInventorySlotContents(i, new ItemStack(Items.SNOWBALL, 1));
+						chestsideone.setInventorySlotContents(i,
+								new ItemStack(Items.SNOWBALL, 1));
 						return true;
-					} else if (stack.getCount() != stack.getMaxStackSize() && stack.getItem() == Items.SNOWBALL) {
-						chestsideone.setInventorySlotContents(i, new ItemStack(stack.getItem(), stack.getCount() + 1));
+					} else if (stack.getCount() != stack.getMaxStackSize()
+							&& stack.getItem() == Items.SNOWBALL) {
+						chestsideone.setInventorySlotContents(i, new ItemStack(
+								stack.getItem(), stack.getCount() + 1));
 						return true;
 					}
 				}
 
 				for (int i = 0; i < chestsidetwo.getSizeInventory(); i++) {
-					ItemStack stack = chestsidetwo.getStackInSlot(i);
+					final ItemStack stack = chestsidetwo.getStackInSlot(i);
 					if (stack.getItem() == Items.AIR) {
-						chestsidetwo.setInventorySlotContents(i, new ItemStack(Items.SNOWBALL, 1));
+						chestsidetwo.setInventorySlotContents(i,
+								new ItemStack(Items.SNOWBALL, 1));
 						return true;
-					} else if (stack.getCount() != stack.getMaxStackSize() && stack.getItem() == Items.SNOWBALL) {
-						chestsidetwo.setInventorySlotContents(i, new ItemStack(stack.getItem(), stack.getCount() + 1));
+					} else if (stack.getCount() != stack.getMaxStackSize()
+							&& stack.getItem() == Items.SNOWBALL) {
+						chestsidetwo.setInventorySlotContents(i, new ItemStack(
+								stack.getItem(), stack.getCount() + 1));
 						return true;
 					}
 				}
 				return false;
 			} else {
-				int invSlots = inventory.getSizeInventory();
+				final int invSlots = inventory.getSizeInventory();
 				int curSlot = 0;
 
 				while (curSlot != invSlots) {
-					ItemStack stack = inventory.getStackInSlot(curSlot);
+					final ItemStack stack = inventory.getStackInSlot(curSlot);
 					if (stack.getItem() == Items.AIR) {
-						inventory.setInventorySlotContents(curSlot, new ItemStack(Items.SNOWBALL, 1));
-						return true;
-					} else if (stack.getCount() != stack.getMaxStackSize() && stack.getItem() == Items.SNOWBALL) {
 						inventory.setInventorySlotContents(curSlot,
-								new ItemStack(stack.getItem(), stack.getCount() + 1));
+								new ItemStack(Items.SNOWBALL, 1));
+						return true;
+					} else if (stack.getCount() != stack.getMaxStackSize()
+							&& stack.getItem() == Items.SNOWBALL) {
+						inventory.setInventorySlotContents(curSlot,
+								new ItemStack(stack.getItem(),
+										stack.getCount() + 1));
 						return true;
 					}
 					curSlot++;

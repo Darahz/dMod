@@ -1,5 +1,8 @@
 {
     "variants": {
-        "": { "model": "darahzmod:block/freezingelement_block" }
+		"facing=north": { "model": "darahzmod:block/freezingelement_block" },
+        "facing=south": { "model": "darahzmod:block/freezingelement_block", "y": 180 },
+        "facing=west":  { "model": "darahzmod:block/freezingelement_block", "y": 270 },
+        "facing=east":  { "model": "darahzmod:block/freezingelement_block", "y": 90 },
     }
 }
