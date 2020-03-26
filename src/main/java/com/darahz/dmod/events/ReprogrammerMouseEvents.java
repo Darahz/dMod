@@ -23,12 +23,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 @Mod.EventBusSubscriber(modid = dMod.MOD_ID, bus = Bus.FORGE)
 public class ReprogrammerMouseEvents {
 
-	private static Minecraft mc;
-
-	public ReprogrammerMouseEvents() {
-		mc = Minecraft.getInstance();
-	}
-
 	@SubscribeEvent()
 	@OnlyIn(Dist.CLIENT)
 	public static void mouseClickInput(MouseInputEvent event) {
@@ -70,17 +64,20 @@ public class ReprogrammerMouseEvents {
 		short selectedData = spawnerData.getShort(selectedKey);
 		if (event.getButton() == 0) {
 
-			if (KeyboardHelper.isHoldingControl())
+			if (KeyboardHelper.isHoldingControl()) {
 				selectedData += 10;
-			else
+			} else {
 				selectedData++;
+			}
 		} else {
-			if (KeyboardHelper.isHoldingControl())
+			if (KeyboardHelper.isHoldingControl()) {
 				selectedData -= 10;
-			else
+			} else {
 				selectedData--;
-			if (selectedData < 1)
+			}
+			if (selectedData < 1) {
 				selectedData = 1;
+			}
 		}
 		if (spawnerData.getShort("MinSpawnDelay") > spawnerData
 				.getShort("MaxSpawnDelay")) {
@@ -148,15 +145,17 @@ public class ReprogrammerMouseEvents {
 		int curselected = itemNBT.getInt("selectedValue");
 
 		if (scrollDown) {
-			if (curselected == 0)
+			if (curselected == 0) {
 				curselected = spawnerData.keySet().toArray().length - 1;
-			else
+			} else {
 				curselected--;
+			}
 		} else if (scrollUp)
-			if (curselected == spawnerData.keySet().toArray().length - 1)
+			if (curselected == spawnerData.keySet().toArray().length - 1) {
 				curselected = 0;
-			else
+			} else {
 				curselected++;
+			}
 
 		ReprogrammerScreenEvents.drawText();
 		itemNBT.putInt("selectedValue", curselected);

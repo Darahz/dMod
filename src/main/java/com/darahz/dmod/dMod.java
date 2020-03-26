@@ -7,6 +7,7 @@ import com.darahz.dmod.objects.BlockInit;
 import com.darahz.dmod.objects.ItemInit;
 import com.darahz.dmod.tileentities.dmodTileEntityType;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
@@ -26,7 +27,7 @@ public class dMod {
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MOD_ID = "darahzmod";
 	public static dMod instance;
-
+	public static Minecraft mc;
 	public dMod() {
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get()
 				.getModEventBus();
@@ -39,7 +40,8 @@ public class dMod {
 		dmodTileEntityType.TILE_ENTITY_TYPES.register(modEventBus);
 
 		instance = this;
-
+		mc = Minecraft.getInstance();
+		
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
