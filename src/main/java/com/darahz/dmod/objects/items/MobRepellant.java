@@ -25,10 +25,7 @@ public class MobRepellant extends Item {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
-		final Byte endermanteleport = 46;
-		final Byte inLove = 18;
-		final Byte drownDamage = 36;
-		final Byte fireDamage = 37;
+		
 		final Byte poofCloud = 20;
 
 		stack.damageItem(1, playerIn, player -> {
@@ -43,9 +40,8 @@ public class MobRepellant extends Item {
 				CreatureEntity creature = (CreatureEntity) target;
 				creature.setSprinting(true);
 				AvoidEntityGoal<?> avoid = new AvoidEntityGoal<>(creature, PlayerEntity.class, 60.0F, 0.8D, 1.33D);
-				creature.goalSelector.addGoal(0, avoid);
 				creature.goalSelector.removeGoal(avoid);
-				creature.setSprinting("YES" == "NO");
+				creature.goalSelector.addGoal(0, avoid);
 
 			}
 

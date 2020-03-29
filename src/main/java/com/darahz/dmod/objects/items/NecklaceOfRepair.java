@@ -3,6 +3,7 @@ package com.darahz.dmod.objects.items;
 import java.util.List;
 
 import com.darahz.dmod.helpers.KeyboardHelper;
+import com.darahz.dmod.helpers.TooltipHelper;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -19,7 +20,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
 public class NecklaceOfRepair extends Item {
@@ -43,12 +43,13 @@ public class NecklaceOfRepair extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn,
 			PlayerEntity player, Hand handIn) {
 		final ItemStack stack = player.getHeldItem(handIn);
-		if (stack.hasTag() && !worldIn.isRemote
-				&& KeyboardHelper.isHoldingShift())
+		if (stack.hasTag() && KeyboardHelper.isHoldingShift()) {
 			toggleEnabled(stack, false);
+			player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f,
+					player.getRNG().nextFloat());	
+		}
 
-		player.playSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f,
-				player.getRNG().nextFloat());
+		
 
 		return super.onItemRightClick(worldIn, player, handIn);
 	}
@@ -76,12 +77,12 @@ public class NecklaceOfRepair extends Item {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn,
-			int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 
 		boolean isEnabled = false;
-		if (stack.hasTag())
+		if (stack.hasTag()) {
 			isEnabled = stack.getOrCreateTag().getBoolean("enabled");
+		}
 
 		if (!isEnabled) {
 			final PlayerEntity player = (entityIn instanceof PlayerEntity)
@@ -103,21 +104,15 @@ public class NecklaceOfRepair extends Item {
 				return;
 
 			final PlayerEntity player = (PlayerEntity) entityIn;
-			final int ticktosec = (KeyboardHelper.isHoldingShift()
-					&& isSelected) ? 2 : 20;
+			final int ticktosec = (KeyboardHelper.isHoldingShift() && isSelected) ? 1 : 20;
 
 			if ((player.ticksExisted % ticktosec) != 0)
 				return;
 
 			final NonNullList<ItemStack> inv = player.inventory.mainInventory;
-			final int i = worldIn.func_226658_a_(LightType.SKY,
-					player.getPosition()) - worldIn.getSkylightSubtracted();
-
-			if (i < 10)
-				return;
 
 			for (final ItemStack itemStack : inv) {
-				if (itemStack.getItem() instanceof AirItem && !isEnabled)
+				if (itemStack.getItem() instanceof AirItem && !isEnabled || itemStack.getItem() instanceof MobRepellant)
 					return;
 				if (itemStack.getDamage() != 0) {
 					final CompoundNBT nbt = stack.getOrCreateTag();
@@ -125,8 +120,9 @@ public class NecklaceOfRepair extends Item {
 					if (ininventory != 0) {
 						itemStack.setDamage(itemStack.getDamage() - 1);
 						nbt.putLong("inInventory", ininventory - 1);
-						if (isEnabled)
+						if (isEnabled) {
 							player.replaceItemInInventory(itemSlot, stack);
+						}
 
 					}
 
@@ -150,46 +146,42 @@ public class NecklaceOfRepair extends Item {
 			} else {
 				final CompoundNBT nbt = stack.getOrCreateTag();
 				final long ininventory = nbt.getLong("inInventory");
-				if (ininventory <= 299) {
-					nbt.putLong("inInventory", ininventory + 1);
+				nbt.putLong("inInventory", ininventory + 1);
 					player.replaceItemInInventory(slot, stack);
 				}
 
 			}
-	}
 
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return false;
+	}
+	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn,
 			List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		if (stack.hasTag()) {
 			if (!stack.getTag().contains("inInventory"))
 				return;
-
+			
 			final CompoundNBT nbt = stack.getOrCreateTag();
 			final long totalSecs = (nbt.getLong("inInventory"));
 			final long minutes = (totalSecs % 3600) / 60;
 			final long seconds = totalSecs % 60;
-			if (KeyboardHelper.isHoldingShift()) {
-				tooltip.add(new StringTextComponent(TextFormatting.WHITE
-						+ ">Time kept in inventory: " + TextFormatting.GOLD
-						+ minutes + ":" + seconds));
-				tooltip.add(new StringTextComponent(
-						"Will repair all items in players inventory."));
-				tooltip.add(new StringTextComponent(
-						TextFormatting.GRAY + "Recharges over time."));
-				tooltip.add(new StringTextComponent(
-						TextFormatting.GRAY + "Only works in light areas."));
-			} else {
-				tooltip.add(new StringTextComponent(TextFormatting.WHITE
-						+ "Time kept in inventory: " + TextFormatting.GOLD
-						+ minutes + ":" + seconds));
-				tooltip.add(new StringTextComponent(
-						TextFormatting.GREEN + "Hold shift for more info."));
-			}
+			
+			String defTooltip = TextFormatting.WHITE + "Time kept in inventory: " + TextFormatting.GOLD + minutes + ":" + seconds;
+			String[] tooltips = new String[] {
+					defTooltip,
+					"Will repair all items in players inventory.",
+					TextFormatting.GRAY + "Recharges over time.",
+					TextFormatting.GRAY + "One second = 1 Damage"};
+			
+			tooltip.addAll(TooltipHelper.holdingShiftTooltip(tooltips, tooltip,defTooltip,worldIn));
 
-		} else
-			tooltip.add(new StringTextComponent(
-					"Seconds kept: " + TextFormatting.WHITE + 0));
+		} else {
+			tooltip.add(new StringTextComponent("Seconds kept: " + TextFormatting.WHITE + 0));
+		}
 
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}

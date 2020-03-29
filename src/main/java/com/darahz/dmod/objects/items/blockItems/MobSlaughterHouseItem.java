@@ -1,49 +1,26 @@
 package com.darahz.dmod.objects.items.blockItems;
 
-import java.util.List;
-
-import com.darahz.dmod.helpers.KeyboardHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SoundType;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class FreezingElementItem extends Item {
-
+public class MobSlaughterHouseItem extends Item {
 	private static Block block;
-	
-	public FreezingElementItem(Block blockIn, Properties props) {
+	public MobSlaughterHouseItem(Block blockIn, Properties props) {
 		super(props);
-		FreezingElementItem.block = blockIn;
+		MobSlaughterHouseItem.block = blockIn;
+		// TODO Auto-generated constructor stub
 	}
-	
-	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new StringTextComponent(TextFormatting.AQUA + "-10,000 Degrees"));
-		if(!KeyboardHelper.isHoldingShift()) {
-			tooltip.add(new StringTextComponent(TextFormatting.GREEN + "Hold shift for more info."));
-		}else {
-			tooltip.add(new StringTextComponent("Turns water into ice"));
-			tooltip.add(new StringTextComponent("Turns lava into obsidian"));
-			tooltip.add(new StringTextComponent("Will drop snowballs into chest/container above"));
-		}
-		super.addInformation(stack, worldIn, tooltip, flagIn);
-	}
-	
+
 
 	@Override
 	public ActionResultType onItemUse(ItemUseContext context) {

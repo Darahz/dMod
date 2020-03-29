@@ -31,7 +31,7 @@ public class FreezingElementTileEntity extends TileEntity
 
 	private static int tickDown = 120;
 	private static final int tickDownInit = 120;
-	private static int freezingRange = 1;
+	private static int freezingRange = 5;
 
 	public FreezingElementTileEntity() {
 		this(dmodTileEntityType.FREEZING_ELEMENT.get());
@@ -70,8 +70,9 @@ public class FreezingElementTileEntity extends TileEntity
 			spawnParticles(world, pos);
 			final float willFreeze = (world.getRandom().nextFloat() / 4);
 
-			if (willFreeze < 0.003f)
+			if (willFreeze < 0.003f) {
 				freezeLiquids(world, pos);
+			}
 
 			return;
 		}
@@ -84,9 +85,10 @@ public class FreezingElementTileEntity extends TileEntity
 		final double d0 = (double) pos.getX() + (double) world.rand.nextFloat();
 		final double d1 = pos.getY() + 0.8D;
 		final double d2 = (double) pos.getZ() + (double) world.rand.nextFloat();
-		if (world.isAirBlock(pos.add(0, 1, 0)))
+		if (world.isAirBlock(pos.add(0, 1, 0))) {
 			world.addParticle(ParticleTypes.ITEM_SNOWBALL, d0, d1 + 0.4D, d2,
 					0.0D, 0.0D, 0.0D);
+		}
 	}
 
 	private static void freezeLiquids(World world, BlockPos pos) {
@@ -104,12 +106,13 @@ public class FreezingElementTileEntity extends TileEntity
 					final IFluidState ifluidstate = world
 							.getFluidState(blockPos);
 					if (ifluidstate.isSource())
-						if (state.getBlock() == Blocks.WATER)
+						if (state.getBlock() == Blocks.WATER) {
 							world.setBlockState(blockPos,
 									Blocks.ICE.getDefaultState());
-						else if (state.getBlock() == Blocks.LAVA)
+						} else if (state.getBlock() == Blocks.LAVA) {
 							world.setBlockState(blockPos,
 									Blocks.OBSIDIAN.getDefaultState());
+						}
 				}
 			}
 		} else {
@@ -118,11 +121,12 @@ public class FreezingElementTileEntity extends TileEntity
 			if (state.getBlock() instanceof FlowingFluidBlock) {
 				final IFluidState ifluidstate = world.getFluidState(pos);
 				if (ifluidstate.isSource())
-					if (state.getBlock() == Blocks.WATER)
+					if (state.getBlock() == Blocks.WATER) {
 						world.setBlockState(pos, Blocks.ICE.getDefaultState());
-					else if (state.getBlock() == Blocks.LAVA)
+					} else if (state.getBlock() == Blocks.LAVA) {
 						world.setBlockState(pos,
 								Blocks.OBSIDIAN.getDefaultState());
+					}
 			}
 		}
 

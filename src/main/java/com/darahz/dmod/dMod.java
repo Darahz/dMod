@@ -51,7 +51,7 @@ public class dMod {
 
 	private void setup(final FMLCommonSetupEvent event) {
 		final RenderType translucent = RenderType.func_228645_f_();
-		RenderTypeLookup.setRenderLayer(BlockInit.reprogrammedspawner_block,
+		RenderTypeLookup.setRenderLayer(BlockInit.mobslaughterhouse_block,
 				translucent);
 
 	}

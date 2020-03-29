@@ -8,9 +8,6 @@ import java.util.Map.Entry;
 import com.darahz.dmod.dMod;
 import com.darahz.dmod.objects.items.TearOfDisenchantment;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -18,7 +15,6 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
@@ -38,21 +34,29 @@ public class DroppedItemHelper {
 	public static void EntityJoinedWorld(EntityJoinWorldEvent event) {
 		if (!(event.getEntity() instanceof ItemEntity))
 			return;
-		if (droppedTears == null)
+		if (droppedTears == null) {
 			droppedTears = new ArrayList<ItemEntity>();
+		}
 		final Item item = ((ItemEntity) event.getEntity()).getItem().getItem();
 		if (item instanceof TearOfDisenchantment)
-			if (!droppedTears.contains((event.getEntity())))
+			if (!droppedTears.contains((event.getEntity()))) {
 				droppedTears.add(((ItemEntity) event.getEntity()));
+			}
 	}
 
 	@SubscribeEvent
 	public static void tickEvent(TickEvent.WorldTickEvent tick) {
-		waitTick(); // Wait for 10 second -> Tick
+		if(waitTick() == false)
+			return;
 		if (droppedTears == null)
 			return;
+		
+		handleDroppedTears();
+		
+	}
 
-		if (!droppedTears.isEmpty())
+	private static void handleDroppedTears() {
+		if (!droppedTears.isEmpty()) {
 			for (final ItemEntity tear : droppedTears) {
 				if (!tear.isAlive()) {
 					droppedTears.remove(tear);
@@ -64,26 +68,16 @@ public class DroppedItemHelper {
 					final List<Entity> list = world
 							.getEntitiesWithinAABBExcludingEntity(ent,
 									ent.getBoundingBox().expand(1, 1, 1));
-					final BlockPos pos = ent.getPosition();
-					final Block block = world.getBlockState(pos).getBlock();
-					final TileEntity tileEnt = world
-							.getTileEntity(pos.add(0, -1, 0));
-
-					if (block != Blocks.AIR && block != Blocks.SOUL_SAND
-							|| !(block instanceof LeavesBlock)
-							|| tileEnt != null)
-						world.setBlockState(pos.add(0, -1, 0),
-								Blocks.SOUL_SAND.getDefaultState());
-					else
-						return;
-
+					
 					for (final Entity itemInSpace : list)
 						if (itemInSpace.getEntity() instanceof ItemEntity) {
 							final Map<Enchantment, Integer> enchantments = EnchantmentHelper
 									.getEnchantments(((ItemEntity) itemInSpace
 											.getEntity()).getItem());
-							if (enchantments.size() == 0)
+							if (enchantments.size() == 0) {
 								break;
+							}
+							
 							final Boolean isItemDamaged = ((ItemEntity) itemInSpace
 									.getEntity()).getItem().isDamaged();
 							if (isItemDamaged) {
@@ -111,8 +105,9 @@ public class DroppedItemHelper {
 
 									enchantedStack.setPickupDelay(60);
 
-									if (!world.isRemote)
+									if (!world.isRemote) {
 										world.addEntity(enchantedStack);
+									}
 
 									itemInSpace.remove();
 									tear.remove();
@@ -131,14 +126,16 @@ public class DroppedItemHelper {
 						}
 				}
 			}
+		}
 	}
 
-	private static void waitTick() {
+	private static boolean waitTick() {
 		if (tickDown != 0) {
 			tickDown--;
-			return;
+			return false;
 		}
 		tickDown = tickDownInit;
+		return true;
 	}
 
 }

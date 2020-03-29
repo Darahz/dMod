@@ -2,4 +2,28 @@
 
  - Item repair widget
  
+  - Drop bread and sword on the ground to get sliced bread
+  
+  
+  - Slaughter block thing
+  	Add items from Iron, redstone, lapis, gold and diamond to upgrade
+  	speed etc.
+  	
+  	
+  	
+New mod
+Time Dependant
+
+ - Time battery
+ 	Charges all items based on time had in inventory.
+ 	- Create a system for this
+  	
+ - Flight feather
+ 	using stored time, enable creative flight.
+
  
+
+	
+final CompoundNBT nbt = stack.getOrCreateTag();
+final long ininventory = nbt.getLong("inInventory");
+nbt.putLong("inInventory", ininventory + 1);

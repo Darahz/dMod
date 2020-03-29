@@ -57,15 +57,16 @@ public class FreezingElement extends Block {
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return dmodTileEntityType.FREEZING_ELEMENT.get().create();
 	}
-
+	
 	@Override
 	public void onPlayerDestroy(IWorld worldIn, BlockPos pos,
 			BlockState state) {
 		final BlockState aboveState = worldIn.getBlockState(pos.add(0, 1, 0));
 		if (!worldIn.isAirBlock(pos.add(0, 1, 0))
-				&& aboveState.getBlock() instanceof SnowBlock)
+				&& aboveState.getBlock() instanceof SnowBlock) {
 			worldIn.setBlockState(pos.add(0, 1, 0),
 					Blocks.AIR.getDefaultState(), 11);
+		}
 		super.onPlayerDestroy(worldIn, pos, state);
 	}
 
