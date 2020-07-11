@@ -72,6 +72,13 @@ public class CraftingWidget extends Item {
 		final CompoundNBT nbt = stack.getOrCreateTag();
 		if(nbt.contains("craftingBlock") && !worldIn.isRemote) {
 			BlockPos pos = BlockPos.fromLong(nbt.getLong("craftingBlock"));
+			if(playerIn.experienceTotal == 0 && !playerIn.isCreative()) {
+				playerIn.sendMessage(new StringTextComponent("Cannot use this tool without any XP."));
+				return new ActionResult<ItemStack>(ActionResultType.FAIL,playerIn.inventory.getCurrentItem());
+				 
+			}
+			playerIn.experienceTotal -= 1;
+			
 			if(worldIn.getBlockState(pos).getBlock() instanceof AirBlock) {
 				playerIn.sendMessage(new StringTextComponent("Target crafting table not found!"));
 				stack.setTag(new CompoundNBT());

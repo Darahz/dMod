@@ -40,7 +40,7 @@ public class MobSlaughterHouseTileEntity extends TileEntity
 		if(!doTick()) return;
 		if(this.world.isRemote) return;
 		World world = this.world;
-		List<MobEntity> list = world.getEntitiesWithinAABB(MobEntity.class,this.getRenderBoundingBox().grow(range, 1, range));
+		List<MobEntity> list = world.getEntitiesWithinAABB(MobEntity.class,this.getRenderBoundingBox().grow(range, 5, range));
 		
 		if(list.size() == 0) return;
 		if(!(entAmount > list.size())) {

@@ -47,7 +47,7 @@ public class FreezingElementTileEntity extends TileEntity
 
 		if (tickDown == 120) {
 			final BlockPos pos = this.getPos().add(0, 1, 0);
-
+			
 			final TileEntity tileentity = world.getTileEntity(pos);
 			if (tileentity == null)
 				if (world.isAirBlock(pos)) {
@@ -88,6 +88,9 @@ public class FreezingElementTileEntity extends TileEntity
 		if (world.isAirBlock(pos.add(0, 1, 0))) {
 			world.addParticle(ParticleTypes.ITEM_SNOWBALL, d0, d1 + 0.4D, d2,
 					0.0D, 0.0D, 0.0D);
+		}else if(world.getBlockState(pos.add(0,1,0)).getBlock() == Blocks.WATER) {
+			world.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, d0, d1 + 0.4D, d2,
+					0.0D, 0.0D, 0.0D);
 		}
 	}
 
@@ -96,7 +99,7 @@ public class FreezingElementTileEntity extends TileEntity
 
 			final List<BlockPos> list = BlockPos.getAllInBox(
 					pos.add(-freezingRange, -freezingRange, -freezingRange),
-					pos.add(freezingRange, freezingRange, freezingRange))
+					pos.add(freezingRange, 1, freezingRange))
 					.map(BlockPos::toImmutable).collect(Collectors.toList());
 
 			Collections.shuffle(list);
@@ -106,12 +109,14 @@ public class FreezingElementTileEntity extends TileEntity
 					final IFluidState ifluidstate = world
 							.getFluidState(blockPos);
 					if (ifluidstate.isSource())
-						if (state.getBlock() == Blocks.WATER) {
-							world.setBlockState(blockPos,
-									Blocks.ICE.getDefaultState());
-						} else if (state.getBlock() == Blocks.LAVA) {
-							world.setBlockState(blockPos,
-									Blocks.OBSIDIAN.getDefaultState());
+						if(world.rand.nextFloat() < 0.01) {
+							if (state.getBlock() == Blocks.WATER) {
+								world.setBlockState(blockPos,
+										Blocks.ICE.getDefaultState());
+							} else if (state.getBlock() == Blocks.LAVA) {
+								world.setBlockState(blockPos,
+										Blocks.OBSIDIAN.getDefaultState());
+							}
 						}
 				}
 			}

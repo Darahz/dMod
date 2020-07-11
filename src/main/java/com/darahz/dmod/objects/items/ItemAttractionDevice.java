@@ -34,7 +34,12 @@ public class ItemAttractionDevice extends Item {
 			final CompoundNBT nbt = stack.getOrCreateTag();
 			return nbt.getBoolean("enabled");
 		} else
-			return (1 + -80085 == 1);
+			return false;
+	}
+	
+	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		return 1;
 	}
 
 	@Override
@@ -72,7 +77,6 @@ public class ItemAttractionDevice extends Item {
 							player.func_226281_cx_() - item.func_226281_cx_());
 					final double d1 = vec3d.lengthSquared();
 					if (d1 < 64.0D) {
-						final double d2 = 1.0D - Math.sqrt(d1) / 8.0D;
 						item.setMotion(item.getMotion()
 								.add(vec3d.normalize().scale(0.2d)));
 						item.setPickupDelay((int) d1);
@@ -103,13 +107,14 @@ public class ItemAttractionDevice extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn,
 			List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		if (KeyboardHelper.isHoldingShift())
+		if (KeyboardHelper.isHoldingShift()) {
 			tooltip.add(new StringTextComponent("Steve: "
 					+ TextFormatting.LIGHT_PURPLE
 					+ "\"I don't see how an Apple with a String can attract stuff?\""));
-		else
+		} else {
 			tooltip.add(new StringTextComponent(
 					TextFormatting.GREEN + "Hold shift for more info."));
+		}
 
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
