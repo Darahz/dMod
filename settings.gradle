@@ -1,0 +1,22 @@
+pluginManagement {
+    repositories {
+        // RetroFuturaGradle itself lives here.
+        maven {
+            name = 'GTNH Maven'
+            url = 'https://nexus.gtnewhorizons.com/repository/public/'
+            content {
+                includeGroupByRegex 'com\\.gtnewhorizons.*'
+            }
+        }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    // Lets Gradle auto-download the JDK 8 toolchain that 1.7.10 needs,
+    // so you only have to install one modern JDK yourself.
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'dMod'
