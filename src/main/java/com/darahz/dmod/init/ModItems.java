@@ -8,6 +8,7 @@ import com.darahz.dmod.items.ItemNecklaceOfRepair;
 import com.darahz.dmod.items.ItemSpawnerRelocator;
 import com.darahz.dmod.items.ItemSpawnerReprogrammer;
 import com.darahz.dmod.items.ItemTearOfDisenchantment;
+import com.darahz.dmod.items.ItemVoidSatchel;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -21,6 +22,7 @@ public final class ModItems {
     public static ItemCraftingWidget craftingWidget;
     public static ItemAttractionDevice attractionDevice;
     public static ItemMobRepellant mobRepellant;
+    public static ItemVoidSatchel voidSatchel;
 
     public static void register() {
         mobRelocator = new ItemMobRelocator();
@@ -31,6 +33,7 @@ public final class ModItems {
         craftingWidget = new ItemCraftingWidget();
         attractionDevice = new ItemAttractionDevice();
         mobRepellant = new ItemMobRepellant();
+        voidSatchel = new ItemVoidSatchel();
 
         GameRegistry.registerItem(mobRelocator, "mobrelocating_tool");
         GameRegistry.registerItem(spawnerRelocator, "spawnerrelocating_tool");
@@ -40,6 +43,7 @@ public final class ModItems {
         GameRegistry.registerItem(craftingWidget, "craftingwidget");
         GameRegistry.registerItem(attractionDevice, "itemattractiondevice");
         GameRegistry.registerItem(mobRepellant, "mobrepellant");
+        GameRegistry.registerItem(voidSatchel, "voidsatchel");
     }
 
     private ModItems() {}

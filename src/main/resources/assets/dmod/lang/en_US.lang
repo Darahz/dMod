@@ -9,7 +9,10 @@ item.dmod.necklaceofrepair.name=Necklace of repair
 item.dmod.itemattractiondevice.name=Item attractor
 item.dmod.craftingwidget.name=Crafting table linker
 item.dmod.mobrepellant.name=Mob repellant
+item.dmod.voidsatchel.name=Void Satchel
 
 tile.dmod.freezingelement_block.name=Freezing Element
 tile.dmod.mobslaughterhouse_block.name=Mob Slaughter House
 tile.dmod.reprogrammedspawner_block.name=Reprogrammed Spawner
+
+container.dmod.voidsatchel=Void Satchel

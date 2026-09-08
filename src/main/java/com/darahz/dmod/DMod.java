@@ -36,6 +36,13 @@ public class DMod {
         }
     }
 
+    /** Shows up in logs/fml-*-latest.log in a dev run; silent in production. */
+    public static void debug(String msg) {
+        if (logger != null) {
+            logger.debug(msg);
+        }
+    }
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();

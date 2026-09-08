@@ -1,6 +1,7 @@
 package com.darahz.dmod.proxy;
 
 import com.darahz.dmod.events.DroppedTearHandler;
+import com.darahz.dmod.events.VoidSatchelPickupHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -20,6 +21,9 @@ public class CommonProxy {
         final DroppedTearHandler tears = new DroppedTearHandler();
         MinecraftForge.EVENT_BUS.register(tears);
         FMLCommonHandler.instance().bus().register(tears);
+
+        // EntityItemPickupEvent is a Forge event only.
+        MinecraftForge.EVENT_BUS.register(new VoidSatchelPickupHandler());
     }
 
     public void postInit(FMLPostInitializationEvent event) {}
