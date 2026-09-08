@@ -1,2 +1,15 @@
 # Localisation for dMod
-# Format: unlocalizedName.name=Display Name
+itemGroup.dmodTab=Darahz's techs
+
+item.dmod.mobrelocating_tool.name=Mob re-locator
+item.dmod.spawnerrelocating_tool.name=Spawner re-locator
+item.dmod.spawnerreprogramming_tool.name=Spawner re-programmer 2k^2
+item.dmod.tearofdisenchantment.name=Tear of disenchantment
+item.dmod.necklaceofrepair.name=Necklace of repair
+item.dmod.itemattractiondevice.name=Item attractor
+item.dmod.craftingwidget.name=Crafting table linker
+item.dmod.mobrepellant.name=Mob repellant
+
+tile.dmod.freezingelement_block.name=Freezing Element
+tile.dmod.mobslaughterhouse_block.name=Mob Slaughter House
+tile.dmod.reprogrammedspawner_block.name=Reprogrammed Spawner

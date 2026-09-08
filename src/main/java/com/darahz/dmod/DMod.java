@@ -1,5 +1,9 @@
 package com.darahz.dmod;
 
+import com.darahz.dmod.init.ModBlocks;
+import com.darahz.dmod.init.ModItems;
+import com.darahz.dmod.init.ModRecipes;
+import com.darahz.dmod.network.DModNetwork;
 import com.darahz.dmod.proxy.CommonProxy;
 
 import cpw.mods.fml.common.Mod;
@@ -26,20 +30,27 @@ public class DMod {
         return logger;
     }
 
-    /** Register blocks, items, and config here. */
+    public static void info(String msg) {
+        if (logger != null) {
+            logger.info(msg);
+        }
+    }
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
+        ModItems.register();
+        ModBlocks.register();
+        DModNetwork.init();
         proxy.preInit(event);
     }
 
-    /** Register recipes, world gen, and event handlers here. */
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        ModRecipes.register();
         proxy.init(event);
     }
 
-    /** Anything that depends on other mods being loaded goes here. */
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);

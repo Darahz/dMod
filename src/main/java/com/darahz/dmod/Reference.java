@@ -11,5 +11,8 @@ public final class Reference {
     public static final String CLIENT_PROXY = "com.darahz.dmod.proxy.ClientProxy";
     public static final String SERVER_PROXY = "com.darahz.dmod.proxy.CommonProxy";
 
+    /** Prefix for resource locations, e.g. "dmod:necklaceofrepair". */
+    public static final String RES = MODID + ":";
+
     private Reference() {}
 }

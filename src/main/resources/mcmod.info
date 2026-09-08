@@ -2,7 +2,7 @@
 {
   "modid": "dmod",
   "name": "dMod",
-  "description": "",
+  "description": "Tools and stuff.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",

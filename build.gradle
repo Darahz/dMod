@@ -47,3 +47,42 @@ processResources {
         expand 'version': project.version, 'mcversion': '1.7.10'
     }
 }
+
+/**
+ * LWJGL 2.9.4's natives bundle ships liblwjgl and jinput but no OpenAL, so
+ * vanilla's MusicTicker dies with
+ *   UnsatisfiedLinkError: org.lwjgl.openal.AL10.nalGetSourcei
+ * about 45 seconds into any session. Link the system OpenAL in under the name
+ * LWJGL looks for. No-op on non-Linux, or if the library isn't installed.
+ */
+def linkSystemOpenAl = tasks.register('linkSystemOpenAl') {
+    description = 'Links system libopenal into the LWJGL natives dir so sound works on Linux.'
+    doLast {
+        if (!System.getProperty('os.name').toLowerCase().contains('linux')) {
+            return
+        }
+        def nativesDir = file('run/natives/lwjgl2')
+        if (!nativesDir.isDirectory()) {
+            logger.lifecycle('linkSystemOpenAl: natives dir not extracted yet, skipping.')
+            return
+        }
+        def system = ['/usr/lib/x86_64-linux-gnu/libopenal.so.1',
+                      '/usr/lib64/libopenal.so.1',
+                      '/usr/lib/libopenal.so.1'].collect { file(it) }.find { it.exists() }
+        if (system == null) {
+            logger.warn('linkSystemOpenAl: no system libopenal found - install libopenal1 for sound.')
+            return
+        }
+        ['libopenal64.so', 'libopenal.so'].each { name ->
+            def link = new File(nativesDir, name)
+            if (!link.exists()) {
+                ant.symlink(link: link.absolutePath, resource: system.absolutePath, overwrite: true)
+                logger.lifecycle("linkSystemOpenAl: linked ${name} -> ${system}")
+            }
+        }
+    }
+}
+
+tasks.matching { it.name in ['runClient', 'runObfClient'] }.configureEach {
+    dependsOn linkSystemOpenAl
+}
