@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "darahzmod:blocks/mobslaughterhouse_block",
-    "front": "darahzmod:blocks/mobslaughterhouse_block",
-    "side": "darahzmod:blocks/mobslaughterhouse_block"
-  }
-}
